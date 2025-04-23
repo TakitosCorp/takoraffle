@@ -4,118 +4,57 @@
     ViewData["Title"] = "Rifa - GalaYaki";
 }
 
-<body class="bg-raffle-bg min-h-screen flex flex-col items-center justify-center p-4 text-center">
-    <div class="max-w-4xl w-full">
-        <h1 class="text-3xl font-bold mb-8 text-raffle-light">Rifa Especial Aniversario - GalaYaki</h1>
-        <div id="raffleGrid" class="grid grid-cols-5 gap-4 mb-8"></div>
-    </div>
+<body class="bg-raffle-bg min-h-screen flex flex-col items-center justify-center p-4 text-center bg-pattern">
+<div class="max-w-6xl w-full relative py-8"> 
+    <div class="relative z-10">
+        <h1 class="text-5xl font-bold mb-1 text-white"> 
+            <span class="bg-clip-text text-transparent bg-gradient-to-r from-raffle-light to-raffle-hover">Rifa Especial Aniversario</span>
+        </h1>
+        <div class="flex justify-center items-center gap-2 mb-8"> 
+            <div class="h-1 w-20 bg-raffle-light rounded-full"></div>
+            <h2 class="text-3xl font-bold text-raffle-light animate-glow">GalaYaki</h2>
+            <div class="h-1 w-20 bg-raffle-light rounded-full"></div>
+        </div>
 
-    <div id="prizePopup" class="popup bg-raffle-bg/95 opacity-0 transition-opacity duration-300">
+        <div class="bg-white/5 backdrop-blur-sm p-6 rounded-2xl border border-raffle-light/30 shadow-xl mb-4"> <!-- Cambiado mb-8 a mb-4 -->
+            <div id="raffleGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
+        </div>
+    </div>
+</div>
+
+    <div id="prizePopup" class="popup bg-black/70 opacity-0 transition-opacity duration-300 backdrop-blur-sm">
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div id="popupContent" class="animate-pop-in bg-white rounded-xl shadow-2xl p-6 max-w-md w-full border-4 border-raffle-dark text-center">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-bold text-raffle-dark">Tu premio</h2>
-                    <button id="closePopup" class="text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
-                </div>
-                <div class="py-4">
-                    <div class="flex justify-center mb-4">
-                        <div class="w-16 h-16 bg-raffle-light/30 rounded-full flex items-center justify-center">
-                            <i id="popupIcon" class="text-raffle-dark text-4xl"></i>
+            <div id="popupContent" class="animate-pop-in bg-white/30 backdrop-blur-md rounded-2xl border border-raffle-light/50 shadow-xl max-w-md w-full animate-pulse-glow overflow-hidden">
+                <div class="relative">
+                    <!-- Header with more opacity -->
+                    <div class="px-6 py-4 flex justify-between items-center border-b border-white/30 bg-raffle-dark/50">
+                        <h2 class="text-xl font-bold text-white">¡Felicidades!</h2>
+                        <button id="closePopup" class="text-white/70 hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                        </button>
+                    </div>
+                    
+                    <!-- Content with more opacity -->
+                    <div class="p-6 bg-white/80">
+                        <div class="flex flex-col items-center mb-6">
+                            <div class="w-20 h-20 bg-raffle-light/50 backdrop-blur-sm rounded-full flex items-center justify-center mb-4 border border-white/50">
+                                <i id="popupIcon" class="text-black text-3xl"></i>
+                            </div>
+                            <div class="text-center">
+                                <h3 class="text-black/90 mb-2">Has ganado:</h3>
+                                <p id="prizeText" class="text-2xl font-bold text-black/90 mb-1">Premio</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <button id="claimButton" class="w-full bg-raffle-dark/70 backdrop-blur-sm text-white font-medium py-3 px-4 rounded-lg border border-raffle-light/50 hover:bg-raffle-dark/90 transition-colors">
+                                Reclamar premio
+                            </button>
                         </div>
                     </div>
-                    <p id="prizeText" class="text-xl font-bold text-raffle-dark mb-2">Premio</p>
-                    <p id="cellId" class="text-raffle-medium">ID</p>
-                </div>
-                <div class="mt-4">
-                    <button id="claimButton" class="bg-raffle-dark hover:bg-raffle-dark/80 text-white font-bold py-2 px-6 rounded-full transition duration-300 transform hover:scale-105">
-                        Confirmar premio
-                    </button>
                 </div>
             </div>
         </div>
     </div>
-
-    <script>
-        // Datos mockeados para pruebas
-        const prizes = [
-            { id: "P1", name: "Tarjeta de Regalo de $50", icon: "gift" },
-            { id: "P2", name: "Auriculares Inalámbricos", icon: "headphones" },
-            { id: "P3", name: "Boletos para el Cine", icon: "film" },
-            { id: "P4", name: "Reloj Inteligente", icon: "watch" },
-            { id: "P5", name: "Cafetera", icon: "coffee" },
-            { id: "P6", name: "Parrilla Eléctrica", icon: "grill" },
-            { id: "P7", name: "Tablet", icon: "tablet" },
-            { id: "P8", name: "Bocina Bluetooth", icon: "speaker" },
-            { id: "P9", name: "Juego de Utensilios de Cocina", icon: "utensils" },
-            { id: "P10", name: "Set de Maletas de Viaje", icon: "suitcase" },
-            { id: "P11", name: "Cámara Digital", icon: "camera" },
-            { id: "P12", name: "Bicicleta", icon: "bicycle" },
-            { id: "P13", name: "Kit de Herramientas", icon: "tools" },
-            { id: "P14", name: "Lámpara LED Inteligente", icon: "lightbulb" },
-            { id: "P15", name: "Suscripción de Música por 1 Año", icon: "music" },
-            { id: "P16", name: "Libro Electrónico", icon: "book" },
-            { id: "P17", name: "Juego de Consola", icon: "gamepad" },
-            { id: "P18", name: "Vales de Supermercado", icon: "shopping-cart" },
-            { id: "P19", name: "Cuadro Decorativo", icon: "image" },
-            { id: "P20", name: "Auriculares con Cancelación de Ruido", icon: "headphones" },
-        ];
-
-        const gridContainer = document.getElementById('raffleGrid');
-        const popup = document.getElementById('prizePopup');
-        const popupContent = document.getElementById('popupContent');
-        const closePopup = document.getElementById('closePopup');
-        const prizeText = document.getElementById('prizeText');
-        const cellId = document.getElementById('cellId');
-        const popupIcon = document.getElementById('popupIcon');
-        const claimButton = document.getElementById('claimButton');
-
-        prizes.forEach(prize => {
-            const cell = document.createElement('div');
-            cell.className = 'grid-cell transition-cell duration-200 hover:scale-105 hover:shadow-md bg-white rounded-lg shadow h-48 flex items-center justify-center cursor-pointer hover:bg-raffle-hover border-2 border-raffle-light';            cell.setAttribute('data-prize', prize.name);
-            cell.setAttribute('data-cellid', prize.id);
-
-            const img = document.createElement('img');
-            img.src = "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/GENERAL-VWjrp7WjA6lM2igr4BOQGeyuZrOrme.png";
-            img.alt = prize.name;
-            img.className = 'w-full h-full object-cover rounded-lg';
-
-            cell.appendChild(img);
-            gridContainer.appendChild(cell);
-
-            cell.addEventListener('click', () => {
-                prizeText.textContent = prize.name;
-                cellId.textContent = `Celda ${prize.id}`;
-                popupIcon.setAttribute('data-lucide', prize.icon);
-                lucide.createIcons();
-                showPopup();
-            });
-        });
-
-        function showPopup() {
-            popup.style.display = 'block';
-            void popup.offsetWidth;
-            popup.classList.add('opacity-100');
-        }
-
-        function hidePopup() {
-            popup.classList.remove('opacity-100');
-            popupContent.classList.add('animate-pop-out');
-
-            setTimeout(() => {
-                popup.style.display = 'none';
-                popupContent.classList.remove('animate-pop-out');
-            }, 300);
-        }
-
-        closePopup.addEventListener('click', hidePopup);
-        popup.addEventListener('click', (e) => {
-            if (e.target === popup) hidePopup();
-        });
-        claimButton.addEventListener('click', () => {
-            alert('Congratulations! Your prize has been claimed.');
-            hidePopup();
-        });
-
-        lucide.createIcons();
-    </script>
+<script src="~/js/raffle.js"></script>
 </body>
