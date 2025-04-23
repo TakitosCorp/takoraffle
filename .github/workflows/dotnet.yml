@@ -25,7 +25,7 @@ jobs:
 
     - name: Publish Single File Executable for Linux
       run: |
-        dotnet publish -c Release --output ./bin/Release/net9.0 -r win-x64 --self-contained true \
+        dotnet publish -c Release -r win-x64 --self-contained true \
         /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true /p:ReadyToRun=true
 
     - name: Remove Windows artifacts
