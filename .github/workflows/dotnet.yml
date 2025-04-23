@@ -1,0 +1,45 @@
+name: Build .NET
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch: 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+
+    - name: Install zip
+      run: sudo apt-get update && sudo apt-get install -y zip
+
+    - name: Publish Single File Executable for Linux
+      run: |
+        dotnet publish -c Release --output ./bin/Release/net9.0 -r win-x64 --self-contained true \
+        /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true /p:ReadyToRun=true
+
+    - name: Remove Windows artifacts
+      run: |
+        if [ -d "./bin/Release/net9.0/win-x64" ]; then
+          rm -rf ./bin/Release/net9.0/win-x64
+        fi
+
+    - name: Create ZIP Archive
+      run: |
+        zip -r PublishedExecutable.zip ./bin/Release/net9.0
+
+    - name: Upload ZIP Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: PublishedExecutable
+        path: PublishedExecutable.zip
