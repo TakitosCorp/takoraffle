@@ -23,19 +23,23 @@ jobs:
     - name: Install zip
       run: sudo apt-get update && sudo apt-get install -y zip
 
-    - name: Publish Single File Executable for Linux
+    - name: Publish Single File Executable for Windows
       run: |
         dotnet publish -c Release -r win-x64 --self-contained true \
         /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true /p:ReadyToRun=true
 
-    - name: Remove Windows artifacts
+    - name: Create ZIP Archive
+      run: |
+        cd ./bin/Release/net9.0/win-x64/publish && zip -r ../../../Server-win-x64.zip .
+
+    - name: Remove win-x64 Folder
       run: |
         if [ -d "./bin/Release/net9.0/win-x64" ]; then
+          echo "Removing win-x64 folder..."
           rm -rf ./bin/Release/net9.0/win-x64
+        else
+          echo "win-x64 folder does not exist, skipping cleanup."
         fi
-
-    - name: Create ZIP Archive
-      run: zip -r PublishedExecutable-win-x64.zip ./bin/Release/net9.0
 
     - name: Create GitHub Release
       id: create_release
@@ -45,7 +49,7 @@ jobs:
       with:
         tag_name: "v${{ github.run_number }}"
         release_name: "Release v${{ github.run_number }}"
-        body: "This release includes the latest build of the .NET application for Linux."
+        body: "This release includes the latest build of the .NET application for Windows."
         draft: false
         prerelease: false
     
@@ -55,6 +59,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./PublishedExecutable-win-x64.zip
+        asset_path: ./bin/Release/Server-win-x64.zip
         asset_name: Server-win-x64.zip
         asset_content_type: application/zip
