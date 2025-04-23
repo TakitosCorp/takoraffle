@@ -35,7 +35,7 @@ jobs:
         fi
 
     - name: Create ZIP Archive
-      run: zip -r PublishedExecutable-linux-x64.zip ./bin/Release/net9.0
+      run: zip -r PublishedExecutable-win-x64.zip ./bin/Release/net9.0
 
     - name: Create GitHub Release
       id: create_release
@@ -55,6 +55,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./PublishedExecutable-linux-x64.zip
-        asset_name: PublishedExecutable-linux-x64.zip
+        asset_path: ./PublishedExecutable-win-x64.zip
+        asset_name: Server-win-x64.zip
         asset_content_type: application/zip
