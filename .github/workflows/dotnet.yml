@@ -34,12 +34,24 @@ jobs:
           rm -rf ./bin/Release/net9.0/win-x64
         fi
 
-    - name: Create ZIP Archive
-      run: |
-        zip -r PublishedExecutable.zip ./bin/Release/net9.0
-
-    - name: Upload ZIP Artifact
-      uses: actions/upload-artifact@v4
+    - name: Create GitHub Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        name: PublishedExecutable
-        path: PublishedExecutable.zip
+        tag_name: "v${{ github.run_number }}"
+        release_name: "Release v${{ github.run_number }}"
+        body: "This release includes the latest build of the .NET application for Windows."
+        draft: false
+        prerelease: false
+
+    - name: Upload to Release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./bin/Release/net9.0
+        asset_name: PublishedExecutable-linux-x64
+        asset_content_type: application/octet-stream
