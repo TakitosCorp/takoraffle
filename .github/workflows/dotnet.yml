@@ -12,50 +12,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Install .NET Core
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 9.0.x
+      - name: Install .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
 
-    - name: Publish Single File Executable for Windows
-      run: |
-        dotnet publish -c Release -r win-x64 --self-contained true \
-        /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true /p:ReadyToRun=true
+      - name: Publish Single File Executable for Windows
+        run: |
+          dotnet publish -c Release -r win-x64 --self-contained true \
+          /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true /p:ReadyToRun=true
 
-    - name: Create ZIP Archive
-      run: |
-        cd ./bin/Release/net9.0/win-x64/publish && zip -r ../../../Server-win-x64.zip .
+      - name: Create ZIP Archive
+        run: |
+          cd ./bin/Release/net9.0/win-x64/publish && zip -r ../../../Server-win-x64.zip .
 
-    - name: Remove win-x64 Folder
-      run: |
-        if [ -d "./bin/Release/net9.0/win-x64" ]; then
-          echo "Removing win-x64 folder..."
-          rm -rf ./bin/Release/net9.0/win-x64
-        else
-          echo "win-x64 folder does not exist, skipping cleanup."
-        fi
+      - name: Remove win-x64 Folder
+        run: |
+          if [ -d "./bin/Release/net9.0/win-x64" ]; then
+            echo "Removing win-x64 folder..."
+            rm -rf ./bin/Release/net9.0/win-x64
+          else
+            echo "win-x64 folder does not exist, skipping cleanup."
+          fi
 
-    - name: Create GitHub Release
-      id: create_release
-      uses: softprops/action-gh-release@v2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: "v${{ github.run_number }}"
-        release_name: "Release v${{ github.run_number }}"
-        body: "This release includes the latest build of the .NET application for Windows."
-        draft: false
-        prerelease: false
-    
-    - name: Upload to Release
-      uses: softprops/action-gh-release@v2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./bin/Release/Server-win-x64.zip
-        asset_name: Server-win-x64.zip
-        asset_content_type: application/zip
+      - name: Create GitHub Release and Upload Assets
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: "v${{ github.run_number }}"
+          name: "Release v${{ github.run_number }}"
+          body: "This release includes the latest build of the .NET application for Windows."
+          draft: false
+          prerelease: false
+          files: ./bin/Release/Server-win-x64.zip
