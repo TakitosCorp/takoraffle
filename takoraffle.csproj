@@ -4,6 +4,15 @@
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <ApplicationIcon>wwwroot\favicon.ico</ApplicationIcon>
+        <Title>TakoRaffle</Title>
+        <Authors>AlexDeveloperUwU</Authors>
+        <Description>A simple website for a raffle organized by GalaYak</Description>
+        <PackageProjectUrl>https://github.com/TakitosCorp/takoraffle</PackageProjectUrl>
+        <PackageIcon>favicon.png</PackageIcon>
+        <RepositoryUrl>https://github.com/TakitosCorp/takoraffle</RepositoryUrl>
+        <Company>AlexDeveloperUwU</Company>
+        <Product>TakoRaffle</Product>
     </PropertyGroup>
 
     <ItemGroup>
