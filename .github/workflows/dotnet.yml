@@ -29,15 +29,6 @@ jobs:
         run: |
           cd ./bin/Release/net9.0/win-x64/publish && zip -r ../../../Server-win-x64.zip .
 
-      - name: Remove win-x64 Folder
-        run: |
-          if [ -d "./bin/Release/net9.0/win-x64" ]; then
-            echo "Removing win-x64 folder..."
-            rm -rf ./bin/Release/net9.0/win-x64
-          else
-            echo "win-x64 folder does not exist, skipping cleanup."
-          fi
-
       - name: Create GitHub Release and Upload Assets
         uses: softprops/action-gh-release@v2
         env:
