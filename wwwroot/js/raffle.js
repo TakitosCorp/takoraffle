@@ -19,6 +19,7 @@
     {id: "P18", name: "Vales de Supermercado", icon: "shopping-cart"},
     {id: "P19", name: "Cuadro Decorativo", icon: "image"},
     {id: "P20", name: "Auriculares con Cancelación de Ruido", icon: "headphones"},
+    {id: "P21", name: "Auriculares con Cancelación de Ruido", icon: "headphones"}
 ];
 
 const gridContainer = document.getElementById('raffleGrid');
