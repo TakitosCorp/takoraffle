@@ -1,0 +1,51 @@
+﻿@page
+@model AdminModel
+@{
+    ViewData["Title"] = "Admin - GalaYaki";
+}
+
+<body class="bg-raffle-bg min-h-screen flex flex-col items-center justify-center p-4 text-center bg-pattern">
+<div class="max-w-6xl w-full relative py-8">
+    <div class="relative z-10">
+        <h1 class="text-5xl font-bold mb-1 text-white">
+            <span class="bg-clip-text text-transparent bg-gradient-to-r from-raffle-light to-raffle-hover">Rifa Especial Aniversario</span>
+        </h1>
+        <div class="flex justify-center items-center gap-2 mb-8">
+            <div class="h-1 w-20 bg-raffle-light rounded-full"></div>
+            <h2 class="text-3xl font-bold text-raffle-light animate-glow">GalaYaki</h2>
+            <div class="h-1 w-20 bg-raffle-light rounded-full"></div>
+        </div>
+
+        <div class="bg-white/5 backdrop-blur-sm p-6 rounded-2xl border border-raffle-light/30 shadow-xl mb-4">
+            <table class="table-auto w-full text-left text-white border-collapse border border-raffle-light/30">
+                <thead>
+                <tr>
+                    <th class="px-4 py-2 border border-raffle-light/30">ID</th>
+                    <th class="px-4 py-2 border border-raffle-light/30">Premio</th>
+                </tr>
+                </thead>
+                <tbody id="prizesTable">
+                    <!-- Los datos se cargarán dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const response = await fetch('/prices');
+        const prizes = await response.json();
+        const prizesTable = document.getElementById('prizesTable');
+
+        prizes.forEach(prize => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="px-4 py-2 border border-raffle-light/30">${prize.id}</td>
+                <td class="px-4 py-2 border border-raffle-light/30">${prize.name}</td>
+            `;
+            prizesTable.appendChild(row);
+        });
+    });
+</script>
+</body>
