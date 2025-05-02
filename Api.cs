@@ -1,36 +1,64 @@
-﻿namespace takoraffle;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Antiforgery;
+
+namespace takoraffle;
 
 public class Api
 {
-    public static void MapRoutes(IEndpointRouteBuilder app)
+    public static void MapRoutes(WebApplication app)
     {
-        app.MapGet("/prices", () =>
+        app.UseAntiforgery();
+        app.MapGet("/prizes", async (RaffleDbContext db) =>
         {
-            var prizes = new[]
-            {
-                new { id = "C1", name = "Tarjeta de Regalo de $50", icon = "gift" },
-                new { id = "C1", name = "Auriculares Inalámbricos", icon = "headphones" },
-                new { id = "C3", name = "Boletos para el Cine", icon = "film" },
-                new { id = "C4", name = "Reloj Inteligente", icon = "watch" },
-                new { id = "C5", name = "Cafetera", icon = "coffee" },
-                new { id = "C6", name = "Parrilla Eléctrica", icon = "grill" },
-                new { id = "C7", name = "Tablet", icon = "tablet" },
-                new { id = "C8", name = "Bocina Bluetooth", icon = "speaker" },
-                new { id = "C9", name = "Juego de Utensilios de Cocina", icon = "utensils" },
-                new { id = "C10", name = "Set de Maletas de Viaje", icon = "suitcase" },
-                new { id = "C11", name = "Cámara Digital", icon = "camera" },
-                new { id = "C12", name = "Bicicleta", icon = "bicycle" },
-                new { id = "C13", name = "Kit de Herramientas", icon = "tools" },
-                new { id = "C14", name = "Lámpara LED Inteligente", icon = "lightbulb" },
-                new { id = "C15", name = "Suscripción de Música por 1 Año", icon = "music" },
-                new { id = "C16", name = "Libro Electrónico", icon = "book" },
-                new { id = "C17", name = "Juego de Consola", icon = "gamepad" },
-                new { id = "C18", name = "Vales de Supermercado", icon = "shopping-cart" },
-                new { id = "C19", name = "Cuadro Decorativo", icon = "image" },
-                new { id = "C20", name = "Auriculares con Cancelación de Ruido", icon = "headphones" },
-                new { id = "C21", name = "Auriculares con Cancelación de Ruido", icon = "headphones" }
-            };
+            var prizes = await db.Prizes.ToListAsync();
             return Results.Json(prizes);
+        });
+
+        app.MapPost("/prizes/{id}/claim", async (int id, RaffleDbContext db) =>
+        {
+            var prize = await db.Prizes.FindAsync(id);
+            if (prize == null) return Results.NotFound();
+            prize.Claimed = true;
+            await db.SaveChangesAsync();
+            return Results.Ok(prize);
+        });
+
+        app.MapPost("/prizes/{id}/unclaim", async (int id, RaffleDbContext db) =>
+        {
+            var prize = await db.Prizes.FindAsync(id);
+            if (prize == null) return Results.NotFound();
+            prize.Claimed = false;
+            await db.SaveChangesAsync();
+            return Results.Ok(prize);
+        });
+
+        app.MapPost("/prizes/upload", async (IFormFile file, RaffleDbContext db) =>
+        {
+            using var reader = new StreamReader(file.OpenReadStream());
+            var prizes = new List<Prize>();
+
+            db.Prizes.RemoveRange(db.Prizes);
+            await db.SaveChangesAsync();
+
+            await db.Database.ExecuteSqlRawAsync("DELETE FROM sqlite_sequence WHERE name='Prizes';");
+
+            while (!reader.EndOfStream)
+            {
+                var line = await reader.ReadLineAsync();
+                if (line == null || line.StartsWith("name,icon,claimed")) continue;
+                var parts = line.Split(',');
+                prizes.Add(new Prize
+                {
+                    Name = parts[0],
+                    Icon = parts[1],
+                    Claimed = bool.Parse(parts[2])
+                });
+            }
+
+            db.Prizes.AddRange(prizes);
+            await db.SaveChangesAsync();
+            return Results.Ok(prizes);
         });
     }
 }

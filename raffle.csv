@@ -1,0 +1,17 @@
+﻿name,icon,claimed
+Ejemplo de regalo,film,false
+Sorpresa de cumpleaños,gift,true
+Aventura misteriosa,map-pin,false
+Descuento exclusivo,tag,true
+Recompensa del día,star,false
+Paquete especial,package,false
+Insignia dorada,award,true
+Oferta relámpago,clock,false
+Viaje gratis,airplane,false
+Entrada VIP,crown,true
+Evento sorpresa,calendar,false
+Amigo secreto,user,false
+Bono sorpresa,heart,true
+Acceso anticipado,unlock,true
+Desafío completado,trophy,true
+Cupón de descuento,shopping-cart,false

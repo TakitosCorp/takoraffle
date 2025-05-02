@@ -7,7 +7,7 @@ const popupIcon = document.getElementById('popupIcon');
 const claimButton = document.getElementById('claimButton');
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const response = await fetch('/prices');
+    const response = await fetch('/prizes');
     const prizes = await response.json();
 
     prizes.forEach((prize, index) => {
