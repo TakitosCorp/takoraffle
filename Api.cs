@@ -55,6 +55,9 @@ public class Api
                     Claimed = bool.Parse(parts[2])
                 });
             }
+            
+            var random = new Random();
+            prizes = prizes.OrderBy(x => random.Next()).ToList();
 
             db.Prizes.AddRange(prizes);
             await db.SaveChangesAsync();
