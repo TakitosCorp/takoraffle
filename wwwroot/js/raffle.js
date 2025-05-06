@@ -72,7 +72,14 @@
                     claimButton.style.display = "block";
                 }
 
-                popupIcon.setAttribute("data-lucide", prize.icon);
+                popupIcon.innerHTML = ""; 
+
+                const newIcon = document.createElement("i");
+                newIcon.id = "popupIcon"; 
+                newIcon.className = "text-black text-3xl";
+                newIcon.setAttribute("data-lucide", prize.icon);
+
+                popupIcon.appendChild(newIcon);
                 lucide.createIcons();
                 showPopup();
             });

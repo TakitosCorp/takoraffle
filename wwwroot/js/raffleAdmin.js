@@ -66,6 +66,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
             });
         }
+        event.target.value = '';
     });
 
     window.claimPrize = async (id, name) => {
