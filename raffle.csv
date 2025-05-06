@@ -1,17 +1,22 @@
 ﻿name,icon,claimed
-Ejemplo de regalo,film,false
-Sorpresa de cumpleaños,gift,true
-Aventura misteriosa,map-pin,false
-Descuento exclusivo,tag,true
-Recompensa del día,star,false
-Paquete especial,package,false
-Insignia dorada,award,true
-Oferta relámpago,clock,false
-Viaje gratis,airplane,false
-Entrada VIP,crown,true
-Evento sorpresa,calendar,false
-Amigo secreto,user,false
-Bono sorpresa,heart,true
-Acceso anticipado,unlock,true
-Desafío completado,trophy,true
-Cupón de descuento,shopping-cart,false
+Timeout a alguien del chat (¡tú eliges!),timer-off,false
+Rol personalizado en Discord,tag,false
+Doodle customizado para ti,brush,false
+Modelo Fumo personalizado (digital),user-pen,false
+Carta escrita a mano digital o en físico,scroll-text,false
+¡Jugamos juntos una partida!,gamepad-2,false
+Casilla vacía (¡Suerte la próxima!),frown,false
+Audio personalizado,cassette-tape,false
+Alarma personalizada,bell-ring,false
+Dibujito chibi personalizado,brush,false
+Video corto personalizado,clapperboard,false
+Tweet a tu elección,twitter,false
+Puedes elegir la miniatura o título de un stream,images,false
+?,circle-help,false
+?,circle-help,false
+?,circle-help,false
+?,circle-help,false
+?,circle-help,false
+?,circle-help,false
+?,circle-help,false
+?,circle-help,false
