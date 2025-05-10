@@ -1,4 +1,4 @@
-﻿﻿document.addEventListener("DOMContentLoaded", async () => {
+﻿document.addEventListener("DOMContentLoaded", async () => {
     const gridContainer = document.getElementById("raffleGrid");
     const popup = document.getElementById("prizePopup");
     const popupContent = document.getElementById("popupContent");
@@ -16,31 +16,39 @@
             if (!response.ok) throw new Error("Error al cargar los premios.");
             const prizes = await response.json();
 
-            prizes.forEach((prize) => {
+            prizes.forEach((prize, idx) => {
                 const cell = document.createElement("div");
-                cell.className = "grid-cell h-48 cursor-pointer group relative";
+                cell.className = "grid-cell h-48 cursor-pointer group relative animate-fade-in";
                 cell.setAttribute("data-prize", prize.name);
                 cell.setAttribute("data-cellid", prize.id);
+
+                const numberBadge = document.createElement("div");
+                numberBadge.className = "absolute top-2 left-2 z-20 bg-raffle-light/90 text-black text-sm font-bold px-2 py-1 rounded-full shadow";
+                numberBadge.textContent = prize.id;
+                cell.appendChild(numberBadge);
 
                 const innerContent = document.createElement("div");
                 innerContent.className =
                     "relative z-10 flex flex-col items-center justify-center h-full w-full bg-white rounded-lg overflow-hidden transition-transform duration-500 group-hover:scale-95";
 
                 const img = document.createElement("img");
-                img.src =
-                    "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/GENERAL-VWjrp7WjA6lM2igr4BOQGeyuZrOrme.png";
+                img.src = "/img/card.png";
                 img.alt = prize.name;
                 img.className =
-                    "w-full h-full object-cover transition-transform duration-500 group-hover:scale-110";
+                    "w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 blur-[2px]";
 
                 if (prize.claimed) {
-                    img.style.filter = "grayscale(50%)";
+                    img.style.filter = "grayscale(50%) blur(2px)";
                     img.style.opacity = "0.5";
                 }
 
                 innerContent.appendChild(img);
                 cell.appendChild(innerContent);
                 gridContainer.appendChild(cell);
+
+                setTimeout(() => {
+                    cell.classList.add("opacity-100", "translate-y-0");
+                }, 50 * idx);
 
                 cell.addEventListener("click", () => {
                     prizeText.textContent = prize.name;
