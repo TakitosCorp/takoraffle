@@ -1,19 +1,33 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@ViewData["Title"]</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <script src="~/lib/tailwindcss/tailwind.js"></script>
-    <script src="~/lib/lucide/lucide.js"></script>
-    <script src="~/lib/tsparticles/particles.js"></script>
-    <script src="~/js/customTailwind.js"></script>
-    <link rel="stylesheet" href="~/css/styles.css"/>
-    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>@ViewData["Title"]</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script src="~/lib/tailwindcss/tailwind.js"></script>
+  <script src="~/lib/lucide/lucide.js"></script>
+  <script src="~/lib/tsparticles/particles.js"></script>
+  <script src="~/js/customTailwind.js"></script>
+  <link rel="stylesheet" href="~/css/styles.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
 </head>
 <main role="main">
-    @RenderBody()
+  @RenderBody()
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("/sw.js").then(
+          function (registration) {
+            console.log("ServiceWorker registration successful with scope: ", registration.scope);
+          },
+          function (error) {
+            console.log("ServiceWorker registration failed: ", error);
+          }
+        );
+      });
+    }
+  </script>
 </main>
 </html>
